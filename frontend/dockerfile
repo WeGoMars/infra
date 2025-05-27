@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+# pnpm 설치
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+WORKDIR /app
+
+# 빌드 결과물 복사
+COPY build/.next .next
+COPY build/public public
+COPY build/package.json .
+COPY build/pnpm-lock.yaml .
+
+# 의존성 설치 (프로덕션만)
+RUN pnpm install --prod --frozen-lockfile
+
+EXPOSE 3000
+
+CMD ["pnpm", "start"]

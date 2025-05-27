@@ -1,0 +1,60 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.pnpm-debug.log
+
+# Logs
+logs
+*.log
+*.log.*
+
+# TypeScript
+dist/
+build/
+*.tsbuildinfo
+
+# Output from tsc or bundlers
+out/
+out-tsc/
+.vite/
+
+# Next.js
+.next/
+.next.cache/
+
+# Vite
+.vite/
+coverage/
+
+# Testing
+coverage/
+.nyc_output/
+jest-cache/
+jest.config.js
+__tests__/
+*.spec.ts
+*.test.ts
+
+# Environment
+.env
+.env.*.local
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Optional: If you use ESLint/Prettier cache
+.eslintcache
+.prettiercache
+
+# Optional: If you use TurboRepo
+turbo/

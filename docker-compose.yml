@@ -1,0 +1,81 @@
+version: "3.8"
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - appnet
+
+  frontend:
+    build: ./frontend
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    networks:
+      - appnet
+
+  backend:
+    build: ./backend
+    working_dir: /app
+    ports:
+      - "4000:3000"
+    networks:
+      - appnet
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - appnet
+
+  # stock-collector:
+  #   build: ./stock-collector
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - appnet
+  #   environment:
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_PORT=${DB_PORT}
+  #     - DB_USERNAME=${DB_USERNAME}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_DATABASE=${DB_DATABASE}
+
+  # ai-recommender:
+  #   build: ./ai-recommender
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - appnet
+  #   environment:
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_PORT=${DB_PORT}
+  #     - DB_USERNAME=${DB_USERNAME}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_DATABASE=${DB_DATABASE}
+
+volumes:
+  db-data:
+
+networks:
+  appnet:
+    driver: bridge
