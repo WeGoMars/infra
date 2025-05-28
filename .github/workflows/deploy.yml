@@ -14,8 +14,8 @@ jobs:
 
       - name: Archive repository (excluding build folders)
         run: |
-          mkdir deploy
-          rsync -av --exclude='*/build' ./ deploy/
+          mkdir infra
+          rsync -av --exclude='*/build' ./ infra/
 
       - name: Clean remote ~/infra except existing build folders
         uses: appleboy/ssh-action@v1.0.3
@@ -48,8 +48,8 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.AWS_CI_KEY }}
-          source: "deploy/*"
-          target: "~/infra"
+          source: "infra/*"
+          target: "~/"
 
       - name: Restart Docker Compose
         uses: appleboy/ssh-action@v1.0.3
