@@ -12,10 +12,16 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Archive repository (excluding build folders)
+      - name: Archive repository (excluding build folders and metadata)
         run: |
           mkdir infra
-          rsync -av --exclude='*/build' ./ infra/
+          rsync -av \
+            --exclude='*/build' \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitignore' \
+            --exclude='README.md' \
+            ./ infra/
 
       - name: Clean remote ~/infra except existing build folders
         uses: appleboy/ssh-action@v1.0.3
