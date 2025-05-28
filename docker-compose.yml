@@ -23,7 +23,7 @@ services:
     build: ./backend
     working_dir: /app
     ports:
-      - "4000:3000"
+      - "4000:4000"
     networks:
       - appnet
     environment:
