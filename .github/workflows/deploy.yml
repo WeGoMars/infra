@@ -1,0 +1,50 @@
+name: Deploy Infra on Main Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Archive repository (excluding build folders)
+        run: |
+          mkdir deploy
+          rsync -av --exclude='*/build' ./ deploy/
+
+      - name: Clean remote ~/infra except existing build folders
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_CI_KEY }}
+          script: |
+            shopt -s extglob
+            cd ~/infra
+            find . -mindepth 1 -maxdepth 1 ! -name 'backend' ! -name 'frontend' ! -name 'ai-recommender' ! -name 'stock-collector' -exec rm -rf {} +
+            find backend frontend ai-recommender stock-collector -mindepth 1 -maxdepth 1 ! -name build -exec rm -rf {} +
+
+      - name: Copy infra to remote
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_CI_KEY }}
+          source: "deploy/*"
+          target: "~/infra"
+
+      - name: Restart Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          key: ${{ secrets.AWS_CI_KEY }}
+          script: |
+            cd ~/infra
+            docker compose down
+            docker compose up -d --build
