@@ -55,7 +55,10 @@ services:
     image: mars-stock-collector-batch
     restart: "no"  # 배치 실행 후 종료되게
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      infra-backend:
+        condition: service_started
     networks:
       - appnet
     environment:
