@@ -50,7 +50,7 @@ services:
   stock-collector-batch:
     build:
       context: ./stock-collector
-      dockerfile: Dockerfile.batch
+      dockerfile: dockerfile.batch
     container_name: stock-collector-batch
     image: mars-stock-collector-batch
     restart: "no"  # 배치 실행 후 종료되게
