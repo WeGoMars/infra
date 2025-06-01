@@ -54,34 +54,34 @@ services:
       timeout: 5s
       retries: 10  
 
-  stock-collector-batch:
-    build:
-      context: ./stock-collector
-      dockerfile: dockerfile.batch
-    container_name: stock-collector-batch
-    image: mars-stock-collector-batch
-    restart: "no"
-    depends_on:
-      db:
-        condition: service_healthy
-      backend:
-        condition: service_started
-    networks:
-      - appnet
-    environment:
-      - PYTHONUNBUFFERED=1
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_DATABASE=${DB_DATABASE}
+  # stock-collector-batch:
+  #   build:
+  #     context: ./stock-collector
+  #     dockerfile: dockerfile.batch
+  #   container_name: stock-collector-batch
+  #   image: mars-stock-collector-batch
+  #   restart: "always"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     backend:
+  #       condition: service_started
+  #   networks:
+  #     - appnet
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_PORT=${DB_PORT}
+  #     - DB_USERNAME=${DB_USERNAME}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_DATABASE=${DB_DATABASE}
 
-  stock-collector-realtime:
+  stock-collector:
     build:
       context: ./stock-collector
-      dockerfile: dockerfile.main
-    container_name: stock-collector-realtime
-    image: mars-stock-collector-realtime
+      dockerfile: dockerfile
+    container_name: stock-collector
+    image: mars-stock-collector
     restart: always
     depends_on:
       db:
