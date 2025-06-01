@@ -39,6 +39,8 @@ jobs:
               ! -name 'frontend' \
               ! -name 'ai-recommender' \
               ! -name 'stock-collector' \
+              ! -name '.env' \
+              
               -exec rm -rf {} +
 
             # 2단계: 각 폴더 내부에서 build 제외 삭제 (존재하는 폴더만)
