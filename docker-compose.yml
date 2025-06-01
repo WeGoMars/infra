@@ -76,8 +76,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_DATABASE}
 
-
-stock-collector-realtime:
+  stock-collector-realtime:
     build:
       context: ./stock-collector
       dockerfile: dockerfile.main
