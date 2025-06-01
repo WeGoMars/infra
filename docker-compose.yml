@@ -47,18 +47,24 @@ services:
     networks:
       - appnet
 
-  # stock-collector:
-  #   build: ./stock-collector
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - appnet
-  #   environment:
-  #     - DB_HOST=${DB_HOST}
-  #     - DB_PORT=${DB_PORT}
-  #     - DB_USERNAME=${DB_USERNAME}
-  #     - DB_PASSWORD=${DB_PASSWORD}
-  #     - DB_DATABASE=${DB_DATABASE}
+  stock-collector-batch:
+    build:
+      context: ./stock-collector
+      dockerfile: Dockerfile.batch
+    container_name: stock-collector-batch
+    image: mars-stock-collector-batch
+    restart: "no"  # 배치 실행 후 종료되게
+    depends_on:
+      - db
+    networks:
+      - appnet
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
 
   # ai-recommender:
   #   build: ./ai-recommender
