@@ -1,4 +1,3 @@
-version: "3.8"
 
 services:
   nginx:
@@ -53,11 +52,11 @@ services:
       dockerfile: dockerfile.batch
     container_name: stock-collector-batch
     image: mars-stock-collector-batch
-    restart: "no"  # 배치 실행 후 종료되게
+    restart: "no"
     depends_on:
       db:
         condition: service_healthy
-      infra-backend:
+      backend:
         condition: service_started
     networks:
       - appnet
