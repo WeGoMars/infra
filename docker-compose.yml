@@ -21,7 +21,7 @@ services:
     volumes:
       - ./nginx/certbot-www:/var/www/certbot  # 같은 호스트 디렉토리
       - ./nginx/ssl:/etc/letsencrypt          # 같은 호스트 디렉토리
-    command: certonly --webroot -w /var/www/certbot -d mars.gensapps.io --email studyuann@gmail.com --agree-tos --dry-run
+    command: certonly --webroot -w /var/www/certbot -d mars.gensapps.io --email studyuann@gmail.com --agree-tos
 
   frontend:
     build: ./frontend
