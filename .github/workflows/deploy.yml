@@ -33,18 +33,18 @@ jobs:
             shopt -s extglob
             cd ~/infra
 
-            # 1단계: 루트에서 backend/frontend/ai-recommender/stock-collector 외는 삭제
+            # 1단계: 루트에서 backend/frontend/ai-recommendations/stock-collector 외는 삭제
             find . -mindepth 1 -maxdepth 1 \
               ! -name 'backend' \
               ! -name 'frontend' \
-              ! -name 'ai-recommender' \
+              ! -name 'ai-recommendations' \
               ! -name 'stock-collector' \
               ! -name '.env' \
               
               -exec rm -rf {} +
 
             # 2단계: 각 폴더 내부에서 build 제외 삭제 (존재하는 폴더만)
-            for dir in backend frontend ai-recommender stock-collector; do
+            for dir in backend frontend ai-recommendations stock-collector; do
               if [ -d "$dir" ]; then
                 find "$dir" -mindepth 1 -maxdepth 1 ! -name build -exec rm -rf {} +
               fi
