@@ -21,7 +21,7 @@ services:
     volumes:
       - ./nginx/certbot-www:/var/www/certbot  # 같은 호스트 디렉토리
       - ./nginx/ssl:/etc/letsencrypt          # 같은 호스트 디렉토리
-    command: certonly --non-interactive --webroot -w /var/www/certbot -d mars.gensapps.io --email studyuann@gmail.com --agree-tos
+    command: certonly --webroot -w /var/www/certbot -d mars.gensapps.io --email studyuann@gmail.com --agree-tos --dry-run
 
   frontend:
     build: ./frontend
@@ -65,28 +65,6 @@ services:
       timeout: 5s
       retries: 10
 
-  # stock-collector-batch:
-  #   build:
-  #     context: ./stock-collector
-  #     dockerfile: dockerfile.batch
-  #   container_name: stock-collector-batch
-  #   image: mars-stock-collector-batch
-  #   restart: "always"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #     backend:
-  #       condition: service_started
-  #   networks:
-  #     - appnet
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
-  #     - DB_HOST=${DB_HOST}
-  #     - DB_PORT=${DB_PORT}
-  #     - DB_USERNAME=${DB_USERNAME}
-  #     - DB_PASSWORD=${DB_PASSWORD}
-  #     - DB_DATABASE=${DB_DATABASE}
-
   stock-collector:
      build:
        context: ./stock-collector
@@ -109,29 +87,29 @@ services:
        - DB_PASSWORD=${DB_PASSWORD}
        - DB_DATABASE=${DB_DATABASE}
 
-  #  ai-recommendations:
-  #    build:
-  #      context: ./ai-recommendations
-  #      dockerfile: dockerfile
-  #    container_name: ai-recommendations
-  #    image: mars-ai-recommendations
-  #    restart: always
-  #    ports:
-  #      - "5000:5000"
-  #    depends_on:
-  #      db:
-  #        condition: service_healthy
-  #      backend:
-  #        condition: service_started
-  #    networks:
-  #      - appnet
-  #    environment:
-  #      - PYTHONUNBUFFERED=1
-  #      - DB_HOST=${DB_HOST}
-  #      - DB_PORT=${DB_PORT}
-  #      - DB_USERNAME=${DB_USERNAME}
-  #      - DB_PASSWORD=${DB_PASSWORD}
-  #      - DB_DATABASE=${DB_DATABASE}
+  ai-recommendations:
+    build:
+      context: ./ai-recommendations
+      dockerfile: dockerfile
+    container_name: ai-recommendations
+    image: mars-ai-recommendations
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - appnet
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
 
 volumes:
   db-data:
